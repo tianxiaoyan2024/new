@@ -26,11 +26,6 @@ df <- data.frame(
 )
 print(df)
 
-# 4) Extract values from a column or select/add a column
-# Extract values from a column (e.g., column "Age")
-column_values <- data$Age
-
-
 # Save the dataframe as a xlsx file
 # Verify if the 'openxlsx' package is installed
 if (!requireNamespace("openxlsx", quietly = TRUE)) {
@@ -51,7 +46,9 @@ print(excel_data)
 write.csv(excel_data, "data/employees.csv")
 
 # 2) Inspect data structure
+
 # View the structure of the data frame
+
 csv_data <- read.csv("data/exployees.csv")  #Load data
 print(csv_data) 
 print(is.data.frame(csv_data)) 
@@ -59,7 +56,9 @@ head(csv_data)
 str(csv_data)
 
 # 3）Check whether a column or row has missing data
+
 # Check for missing values in a specific column (e.g., column "Age")
+
 is.na(df$Age)
 
 any_missing <- any(is.na(df$Age))
@@ -101,6 +100,7 @@ long_df <- wide_df %>%
                names_to = "Category",  # The new column name to store the original column names
                values_to = "Value")  # he new column name to store the corresponding values
 str(long_df)
+
 
 # 6) Visualize the data 
 p <- ggplot(df, aes(x = Age, y = Salary, color = factor(ID))) +
