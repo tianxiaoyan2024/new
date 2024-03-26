@@ -26,6 +26,11 @@ df <- data.frame(
 )
 print(df)
 
+# 4) Extract values from a column or select/add a column
+# Extract values from a column (e.g., column "Age")
+column_values <- data$Age
+
+
 # Save the dataframe as a xlsx file
 # Verify if the 'openxlsx' package is installed
 if (!requireNamespace("openxlsx", quietly = TRUE)) {
@@ -43,7 +48,7 @@ write.xlsx(df, file = "data/employees.xlsx", # save in a file
 
 excel_data<- read.xlsx("data/employees.xlsx")  
 print(excel_data) 
-write.csv(excel_data, "data/exployees.csv")
+write.csv(excel_data, "data/employees.csv")
 
 # 2) Inspect data structure
 # View the structure of the data frame
@@ -54,5 +59,56 @@ head(csv_data)
 str(csv_data)
 
 # 3）Check whether a column or row has missing data
+# Check for missing values in a specific column (e.g., column "Age")
+is.na(df$Age)
 
+any_missing <- any(is.na(df$Age))
+print(paste("Does 'Age' have missing data?", any_missing))
 
+# Check for missing values in the entire data frame
+any_missing_in_data <- any(is.na(df))
+cat("Does the data frame have missing data?", any_missing_in_data)
+
+# 4) Extract values from a column or select/add a column
+
+# Extract values from a column (e.g., column "Name")
+
+library("tidyverse")  # load the tidyverse packages, incl. dplyr
+column_values <- df$Name
+print(df$Name)
+
+# Select specific columns
+selected_data <- select(df, Age, Salary)
+print(selected_data)
+
+# Add a new column based on existing columns
+df1 <- mutate(df, Total = Age + Salary)
+
+# 5) Transform a wider table to a long format
+
+library(tidyverse)
+long_df <- df %>%
+  gather(key = "Category", value = "value", -ID, -Name) 
+str(long_df)
+
+#Note: In newer versions of the 'tidyr' package, the 'gather()' and 'spread()' functions 
+#      have been replaced by 'pivot longer()'and 'pivot wider()'.There is an example to use
+#      'pivot longer()' for reshaping data
+
+wide_df <- read.csv("data/employees.csv")
+long_df <- wide_df %>%
+  pivot_longer(cols = -c(ID, Name),  # Select all columns except ID and Name
+               names_to = "Category",  # The new column name to store the original column names
+               values_to = "Value")  # he new column name to store the corresponding values
+str(long_df)
+
+# 6) Visualize the data 
+p <- ggplot(df, aes(x = Age, y = Salary, color = factor(ID))) +
+  geom_point() +  # Add scatter points to the plot
+  labs(title = "Age vs. Salary",  # Add a title to the plot
+       x = "Age",                 # Label the x-axis
+       y = "Salary") +         # Label the y-axis
+  theme_minimal()           # Use a minimal theme for the plot
+  
+# Print the plot to display it
+print(p)
